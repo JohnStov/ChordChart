@@ -24,5 +24,9 @@ let major (scale : Scale) =
 let minor (scale : Scale) = 
     [ scale.[0]; scale.[2]; scale.[3]; scale.[5]; scale.[7]; scale.[8]; scale.[10] ]
 
-let scaleOf (note : Note) : Scale =
-    chromatic @ chromatic |> List.skipWhile (fun n -> n <> note) |> List.take 12
+let stringNotes (note : Note) nFrets : Note list =
+    chromatic @ chromatic |> List.skipWhile (fun n -> n <> note) |> List.take nFrets
+
+let notePositions (stringNotes : Note list) (scale : Scale) : int list =
+    scale |> List.map (fun scaleNote -> stringNotes |> List.findIndex (fun stringNote -> stringNote = scaleNote)) |> List.sort
+
