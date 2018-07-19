@@ -16,7 +16,7 @@ type Note =
 
 type Scale = Note list
 
-let chromatic : Scale = [C; Csharp; D; Eflat; E; F; Fsharp; G; Aflat; A; Bflat; B]
+let allNotes : Scale = [C; Csharp; D; Eflat; E; F; Fsharp; G; Aflat; A; Bflat; B]
 
 let major (scale : Scale) = 
     [ scale.[0]; scale.[2]; scale.[4]; scale.[5]; scale.[7]; scale.[9]; scale.[11] ]
@@ -24,9 +24,20 @@ let major (scale : Scale) =
 let minor (scale : Scale) = 
     [ scale.[0]; scale.[2]; scale.[3]; scale.[5]; scale.[7]; scale.[8]; scale.[10] ]
 
-let stringNotes (note : Note) nFrets : Note list =
-    chromatic @ chromatic |> List.skipWhile (fun n -> n <> note) |> List.take nFrets
+let chromatic length root : Scale =
+    let rec extendToLength (notes : Scale) =
+        if notes |> List.length >= length then
+            notes |> List.take length
+        else
+            notes @ allNotes |> extendToLength  
 
-let notePositions (stringNotes : Note list) (scale : Scale) : int list =
-    scale |> List.map (fun scaleNote -> stringNotes |> List.findIndex (fun stringNote -> stringNote = scaleNote)) |> List.sort
+    let start = allNotes |> List.skipWhile (fun n -> n <> root)
+    start |> extendToLength
+
+let octave = chromatic 12 
+
+let notePositions nFrets root scale : int list =
+    let stringNotes = chromatic nFrets root
+    let positions = stringNotes |> List.mapi (fun i n -> if (scale |> List.contains n) then Some i else None)
+    positions |> List.filter (fun i -> i <> None) |> List.map (fun i -> i.Value)
 
