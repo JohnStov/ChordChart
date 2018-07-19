@@ -1,8 +1,8 @@
 ﻿// Learn more about F# at http://fsharp.org
 
-open System
+open Tab
 
 [<EntryPoint>]
 let main argv =
-    printfn "Hello World from F#!"
+    drawTab true 5 |> printf "%s"
     0 // return an integer exit code
