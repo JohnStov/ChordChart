@@ -24,20 +24,25 @@ let major (scale : Scale) =
 let minor (scale : Scale) = 
     [ scale.[0]; scale.[2]; scale.[3]; scale.[5]; scale.[7]; scale.[8]; scale.[10] ]
 
-let chromatic length root : Scale =
+let chromatic length rootNote : Scale =
     let rec extendToLength (notes : Scale) =
         if notes |> List.length >= length then
             notes |> List.take length
         else
             notes @ allNotes |> extendToLength  
 
-    let start = allNotes |> List.skipWhile (fun n -> n <> root)
-    start |> extendToLength
+    allNotes 
+    |> List.skipWhile (fun n -> n <> rootNote)
+    |> extendToLength
 
 let octave = chromatic 12 
+let cMaj = octave C |> major
+let cMin = octave C |> minor
 
-let notePositions nFrets root scale : int list =
-    let stringNotes = chromatic nFrets root
-    let positions = stringNotes |> List.mapi (fun i n -> if (scale |> List.contains n) then Some i else None)
-    positions |> List.filter (fun i -> i <> None) |> List.map (fun i -> i.Value)
+let notePositions nFrets rootNote scale : int list =
+    let stringNotes = chromatic nFrets rootNote
+
+    stringNotes 
+    |> List.mapi (fun i n -> if (scale |> List.contains n) then Some i else None) 
+    |> List.choose id
 
