@@ -24,6 +24,9 @@ let major (scale : Scale) =
 let minor (scale : Scale) = 
     [ scale.[0]; scale.[2]; scale.[3]; scale.[5]; scale.[7]; scale.[8]; scale.[10] ]
 
+let triad (scale : Scale) = 
+    [scale.[0]; scale.[2]; scale.[4]]
+
 let chromatic length rootNote : Scale =
     let rec extendToLength (notes : Scale) =
         if notes |> List.length >= length then

@@ -5,6 +5,6 @@ open Scale
 
 [<EntryPoint>]
 let main argv =
-    let cMaj = octave C |> major
+    let cMaj = octave C |> major |> triad
     drawTab true 12 guitar cMaj |> printf "%s"
     0 // return an integer exit code
